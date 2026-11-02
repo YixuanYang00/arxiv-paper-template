@@ -1,0 +1,19 @@
+# LaTeX build files. The template source and PDF preview are tracked.
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex
+*.synctex.gz
+*.toc
+*.lof
+*.lot
+*.loa
+*.nav
+*.snm
+*.vrb

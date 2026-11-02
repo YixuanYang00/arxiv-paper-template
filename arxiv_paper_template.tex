@@ -1,0 +1,268 @@
+% Reusable English paper template. Save this file as UTF-8.
+% Compile with pdfLaTeX, or run: latexmk -pdf arxiv_paper_template.tex
+% Compile at least twice to update references and appendix contents.
+%
+% 使用方法：复制本文件，修改题目、作者和正文即可。
+% 配色集中在下方“COLORS AND LINKS”部分。
+% 文献采用作者—年份引用，如 Robbins and Monro (1951)，不用数字编号引用。
+% 本文件自带示例参考文献和图框，不需要额外的 .bib、.bst 或图片文件。
+% References 之后自动生成只含附录及小节的目录。
+
+\documentclass[10pt,a4paper]{article}
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,mathtools,bm,mathrsfs}
+\usepackage{graphicx,booktabs,array,microtype,aliascnt}
+\usepackage{algorithm,algpseudocode}
+\usepackage{xurl}
+\usepackage[authoryear,round]{natbib}
+\usepackage{xcolor}
+
+% ================================================================
+% COLORS AND LINKS -- 与 Muon 主稿保持一致，只需在这里修改颜色。
+% ================================================================
+% 文献引用和网址：深蓝色。
+\definecolor{ReferenceBlue}{rgb}{0,0.19,0.56}
+% 公式、定理、图表、算法、章节及附录引用：暗红色。
+\definecolor{CrossReferenceRed}{rgb}{0.7,0,0}
+
+\usepackage[
+  colorlinks=true,
+  linkcolor=CrossReferenceRed,
+  citecolor=ReferenceBlue,
+  urlcolor=ReferenceBlue,
+  linktoc=all,
+  pdfusetitle
+]{hyperref}
+\usepackage{bookmark}
+
+% ================================================================
+% THEOREM ENVIRONMENTS
+% aliascnt 使共享编号的 lemma/corollary 等被 cleveref 正确识别。
+% ================================================================
+\newtheorem{theorem}{Theorem}[section]
+\newaliascnt{lemma}{theorem}
+\newtheorem{lemma}[lemma]{Lemma}
+\aliascntresetthe{lemma}
+\newaliascnt{proposition}{theorem}
+\newtheorem{proposition}[proposition]{Proposition}
+\aliascntresetthe{proposition}
+\newaliascnt{corollary}{theorem}
+\newtheorem{corollary}[corollary]{Corollary}
+\aliascntresetthe{corollary}
+
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}[section]
+\newtheorem{definition}{Definition}[section]
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+
+% cleveref 应放在 hyperref 和上述定理环境之后。
+% 不使用 nameinlink：例如 Theorem 4.1 中仅编号标红，文字保持黑色。
+\usepackage[noabbrev]{cleveref}
+\crefname{algorithm}{Algorithm}{Algorithms}
+\Crefname{algorithm}{Algorithm}{Algorithms}
+\crefname{theorem}{Theorem}{Theorems}
+\Crefname{theorem}{Theorem}{Theorems}
+\crefname{lemma}{Lemma}{Lemmas}
+\Crefname{lemma}{Lemma}{Lemmas}
+\crefname{proposition}{Proposition}{Propositions}
+\Crefname{proposition}{Proposition}{Propositions}
+\crefname{corollary}{Corollary}{Corollaries}
+\Crefname{corollary}{Corollary}{Corollaries}
+\crefname{assumption}{Assumption}{Assumptions}
+\Crefname{assumption}{Assumption}{Assumptions}
+\crefname{definition}{Definition}{Definitions}
+\Crefname{definition}{Definition}{Definitions}
+\crefname{remark}{Remark}{Remarks}
+\Crefname{remark}{Remark}{Remarks}
+\crefname{section}{Section}{Sections}
+\Crefname{section}{Section}{Sections}
+\crefname{figure}{Figure}{Figures}
+\Crefname{figure}{Figure}{Figures}
+\crefname{table}{Table}{Tables}
+\Crefname{table}{Table}{Tables}
+
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\setlength{\emergencystretch}{2em}
+\pagestyle{plain}
+\raggedbottom
+
+% ================================================================
+% TITLE AND AUTHORS -- PDF metadata follows these automatically.
+% ================================================================
+\title{Paper Title}
+\author{}
+% 需要作者信息时，将上一行替换为例如：
+% \author{Author Name\\Department, University\\
+%   \texttt{author@example.com}}
+\date{}
+
+\begin{document}
+% 保留此行：附录目录不显示正文各节。
+\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}}
+\maketitle
+
+\begin{abstract}
+Replace this paragraph with the abstract of your paper. State the
+problem, the assumptions, the main result and its scope. The examples
+below demonstrate the reference colors and can be replaced directly.
+\end{abstract}
+
+\section{Introduction}
+
+Introduce the problem and explain the main contribution. A literature
+citation such as \citep{robbins1951} uses author--year labels in deep blue. Internal references
+such as \cref{ass:smoothness,thm:descent}, \eqref{eq:descent}, and
+\cref{alg:example,fig:example,tab:colors} have dark-red numbers.
+The text of the paper, displayed equations and theorem headings
+remain black.
+
+\section{Related works}
+
+Discuss the relevant literature and distinguish the assumptions and
+conclusions. For a citation used as part of a sentence, write, for
+example, \citet{robbins1951}.
+
+\section{Problem setup}
+
+Specify the objective, the domain and the algorithm. The Euclidean
+norm is denoted by $\|\cdot\|$. The following assumption and algorithm
+are illustrative examples rather than requirements of this template.
+
+\begin{assumption}[$L$-smoothness]
+\label{ass:smoothness}
+The function $f:\R^d\to\R$ is differentiable, and there is $L>0$ such that
+$\|\nabla f(x)-\nabla f(y)\|\le L\|x-y\|$ for all $x,y\in\R^d$.
+\end{assumption}
+
+\begin{algorithm}[htbp]
+\caption{Gradient descent: an illustrative algorithm}
+\label{alg:example}
+\begin{algorithmic}[1]
+\Require Initial point $x_0\in\R^d$, stepsize $\eta>0$, iterations $T\ge1$
+\For{$t=0,\ldots,T-1$}
+  \State $x_{t+1}\gets x_t-\eta\nabla f(x_t)$
+\EndFor
+\State \Return $x_T$
+\end{algorithmic}
+\end{algorithm}
+
+\section{Main results}
+
+\begin{theorem}[Illustrative descent result]
+\label{thm:descent}
+Under \cref{ass:smoothness}, if $0<\eta\le1/L$, the iterates of
+\cref{alg:example} satisfy, for every $0\le t<T$,
+\begin{equation}
+ f(x_{t+1})\le f(x_t)-\frac{\eta}{2}\|\nabla f(x_t)\|^2.
+ \label{eq:descent}
+\end{equation}
+\end{theorem}
+
+The proof is in Appendix~\ref{app:proofs}. Use \verb|\cref{...}| for a
+named reference and \verb|\eqref{...}| for an equation number in
+parentheses. Use \verb|\citep{...}| or \verb|\citet{...}| for literature.
+
+\section{Experiments}
+
+Describe the experimental setup and report the findings. The examples
+in \cref{fig:example,tab:colors} demonstrate captions and references.
+
+\begin{figure}[htbp]
+\centering
+\fbox{\parbox[c][20mm][c]{0.75\linewidth}{\centering
+  Figure placeholder\\[3pt]
+  Replace this box with \texttt{\string\includegraphics}.}}
+\caption{A self-contained figure placeholder. Figure captions remain black.}
+\label{fig:example}
+\end{figure}
+
+\begin{table}[htbp]
+\centering
+\caption{The reference palette used throughout the template.}
+\label{tab:colors}
+\begin{tabular}{ll}
+\toprule
+Element & Color\\
+\midrule
+Internal cross-references & \textcolor{CrossReferenceRed}{Dark red}\\
+Literature citations and URLs & \textcolor{ReferenceBlue}{Deep blue}\\
+Body text, equations and captions & Black\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Conclusion}
+
+Summarize the results and their limitations. Replace the illustrative
+content with your own paper while retaining the preamble and appendix
+contents commands as needed.
+
+% ================================================================
+% REFERENCES -- single-file example, before the appendix contents.
+% ================================================================
+\clearpage
+\begin{thebibliography}{9}
+\bibitem[Robbins and Monro(1951)]{robbins1951}
+H.~Robbins and S.~Monro.
+\newblock A stochastic approximation method.
+\newblock \emph{The Annals of Mathematical Statistics},
+22(3):400--407, 1951.
+\newblock \url{https://doi.org/10.1214/aoms/1177729586}.
+\end{thebibliography}
+
+% 如需 BibTeX，用下面两行替换整个 thebibliography 环境，并提供 .bib：
+% plainnat 支持作者—年份引用；不要改成仅提供数字引用的参考文献样式。
+% \bibliographystyle{plainnat}
+% \bibliography{references}
+
+% ================================================================
+% APPENDICES -- printed contents and PDF sidebar entries in dark red.
+% ================================================================
+\clearpage
+\appendix
+\bookmarksetup{color=CrossReferenceRed}
+\addtocontents{toc}{\protect\setcounter{tocdepth}{2}}
+\begingroup
+\color{CrossReferenceRed}
+\hypersetup{linktoc=all}
+\renewcommand{\contentsname}{Contents of the Appendices}
+\phantomsection
+\pdfbookmark[1]{Contents of the Appendices}{appendix-contents}
+\tableofcontents
+\endgroup
+\clearpage
+\numberwithin{equation}{section}
+
+\section{Proofs}
+\label{app:proofs}
+
+\subsection{Proof of the illustrative theorem}
+
+\begin{proof}[Proof of \cref{thm:descent}]
+The smoothness assumption gives
+\begin{equation}
+ f(y)\le f(x)+\langle\nabla f(x),y-x\rangle
+             +\frac{L}{2}\|y-x\|^2.
+ \label{eq:appendix-smoothness}
+\end{equation}
+Substituting $x=x_t$ and $y=x_t-\eta\nabla f(x_t)$ into
+\eqref{eq:appendix-smoothness}, we obtain
+\[
+ f(x_{t+1})\le f(x_t)
+ -\eta\left(1-\frac{L\eta}{2}\right)\|\nabla f(x_t)\|^2.
+\]
+Since $L\eta\le1$, this proves \eqref{eq:descent}.
+\end{proof}
+
+\section{Additional details}
+
+\subsection{Supplementary material}
+
+Place further proofs, implementation details or additional results here.
+The appendix contents update automatically as sections are added or
+removed. Compile twice, or use \texttt{latexmk}, to refresh page numbers.
+
+\end{document}
